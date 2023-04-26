@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+bool is_cycle(vector<vector<int>> adj_matrix) {
+    int n = adj_matrix.size();
+    bool* visited = new bool[n];
+
+    for (int i = 0; i < n; i++) visited[i] = false;
+
+    int i = 0;
+
+    for (int j = 0; j < n; j++) {
+        if (adj_matrix[i][j] == '1'){
+            adj_matrix[i][j] = '0';
+            adj_matrix[j][i] = '0';
+            i = j;
+            j = -1;
+        }
+    }
+
+    for (int k = 0; k < n; k++) {
+        for (int j = 0; j < n; j++) {
+            if (adj_matrix[k][j] == '1') return false;
+        }
+    }
+
+    return true;
+}
+
+int main() {
+    int t; // liczba grafów
+    cin >> t;
+    bool notCycle = false;
+
+    while (t--) {
+        int n; // liczba wierzchołków
+        cin >> n;
+        notCycle = false;
+        vector<vector<int>> adj_matrix(n, vector<int>(n));
+        int stan = 0;
+
+        for (int i = 0; i < n; i++) {
+            stan = 0;
+            for (int j = 0; j < n; j++) {
+                char c;
+                cin >> c;
+                adj_matrix[i][j] = c;
+                if (adj_matrix[i][j] == '1') stan++;
+            }
+           /* for (int k = 0; k < n; k++) {
+                for (int l = 0; l < n; l++) {
+                    cout << adj_matrix[k][l] << " ";
+                }
+                cout << endl;
+            }*/
+            if (stan != 2) {
+                notCycle = true;
+            }
+        }
+        if (notCycle == true) {
+            cout << "0" << endl;
+        }
+        else cout << is_cycle(adj_matrix) << endl;
+       
+    }
+
+    return 0;
+}
